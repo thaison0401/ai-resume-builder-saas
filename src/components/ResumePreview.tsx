@@ -70,7 +70,11 @@ function PersonalInfoHeader({ resumeData }: ResumeSectionProps) {
       photo instanceof File ? URL.createObjectURL(photo) : (photo ?? "");
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPhotoSrc(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
+    return () => {
+      if (photo instanceof File) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
   }, [photo]);
 
   return (

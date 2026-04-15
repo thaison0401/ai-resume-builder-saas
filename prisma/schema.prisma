@@ -21,8 +21,8 @@ model Resume {
   description String?
 
   photoUrl   String?
-  colorHex   String? @default("#000000")
-  borderStyle String? @default("squircle")
+  colorHex   String  @default("#000000")
+  borderStyle String @default("squircle")
   summary    String?
   firstName   String?
   lastName    String?
@@ -63,15 +63,15 @@ model WorkExperience {
 model Education {
   id String @id @default(cuid())
 
-degree String?
-school String?
-startDate DateTime?
+  degree String?
+  school String?
+  startDate DateTime?
   endDate DateTime?
 
-    resumeId String
+  resumeId String
   resume  Resume @relation(fields: [resumeId], references: [id])
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("educations")
