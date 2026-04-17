@@ -1,6 +1,7 @@
 "use server";
 
 import genAI from "@/lib/gemini";
+import { HarmCategory, HarmBlockThreshold } from "@google/generative-ai"; // Import thêm cấu hình an toàn
 import {
   generateSummarySchema,
   GenerateSummaryInput,
@@ -8,6 +9,27 @@ import {
   generateWorkExperienceSchema,
   WorkExperience,
 } from "@/lib/validation";
+
+// --- Cấu hình dùng chung cho Model Gemini ---
+// Hạ mức độ chặn từ khóa để tránh API bị crash ngẫu nhiên với các CV ngành IT/Bảo mật
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_NONE,
+  },
+];
 
 export async function generateSummary(input: GenerateSummaryInput) {
   //TODO: Block for non-premium users
@@ -56,11 +78,14 @@ export async function generateSummary(input: GenerateSummaryInput) {
       .join("\n\n")}
 
     Skills:
-    ${skills?.join(", ") || "N/A"} 
+    ${skills?.filter((s) => s.trim()).join(", ") || "N/A"} 
   </USER_DATA>
   `;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+  const model = genAI.getGenerativeModel({
+    model: "gemini-3-flash-preview",
+    safetySettings,
+  });
   const result = await model.generateContent(prompt);
   const aiResponse = result.response.text();
 
@@ -108,7 +133,10 @@ export async function generateWorkExperience(
   </USER_INPUT>
   `;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+  const model = genAI.getGenerativeModel({
+    model: "gemini-3-flash-preview",
+    safetySettings,
+  });
   const result = await model.generateContent(prompt);
   const aiResponse = result.response.text();
 
@@ -116,7 +144,6 @@ export async function generateWorkExperience(
     throw new Error("Failed to generate AI response");
   }
 
-  // Regex Bọc Thép: Dùng [ \t]* để cấm việc quét tràn xuống dòng dưới
   return {
     position: aiResponse.match(/Job title:[ \t]*([^\n]*)/i)?.[1]?.trim() || "",
     company: aiResponse.match(/Company:[ \t]*([^\n]*)/i)?.[1]?.trim() || "",
