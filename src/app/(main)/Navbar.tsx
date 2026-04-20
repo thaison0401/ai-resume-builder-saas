@@ -11,7 +11,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Navbar() {
           <ThemeToggle />
           <UserButton
             appearance={{
-              baseTheme: mounted && theme === "dark" ? dark : undefined,
+              baseTheme: mounted && resolvedTheme === "dark" ? dark : undefined,
               elements: {
                 avatarBox: {
                   width: 35,
