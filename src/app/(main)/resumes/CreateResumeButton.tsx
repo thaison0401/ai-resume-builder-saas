@@ -12,7 +12,8 @@ interface CreateResumeButtonProps {
 export default function CreateResumeButton({
   canCreate,
 }: CreateResumeButtonProps) {
-  const PremiumModal = usePremiumModal();
+  // CẬP NHẬT: Dùng selector để chỉ lấy hàm setOpen, giúp tối ưu hiệu năng
+  const setOpen = usePremiumModal((s) => s.setOpen);
 
   if (canCreate) {
     return (
@@ -27,7 +28,7 @@ export default function CreateResumeButton({
 
   return (
     <Button
-      onClick={() => PremiumModal.setOpen(true)}
+      onClick={() => setOpen(true)} // Đổi từ PremiumModal.setOpen thành setOpen
       className="mx-auto flex w-fit gap-2"
     >
       <PlusSquare className="size-5" /> New resume
