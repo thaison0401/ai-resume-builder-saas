@@ -29,6 +29,7 @@ export const getUserSubscriptionLevel = cache(
       return "pro_plus";
     }
 
-    throw new Error("Invalid subscription");
+    console.error("Unknown Stripe price id in user subscription");
+    return "free";
   },
 );
