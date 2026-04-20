@@ -1,7 +1,8 @@
 "use server";
 
-import stripe from "@/lib/stripe";
 import { currentUser } from "@clerk/nextjs/server";
+import stripe from "@/lib/stripe";
+import { env } from "@/env";
 
 export async function createCheckoutSession(priceId: string) {
   const user = await currentUser();
@@ -10,24 +11,30 @@ export async function createCheckoutSession(priceId: string) {
     throw new Error("Unauthorized");
   }
 
+  const allowedPriceIds = [
+    env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY,
+    env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY,
+  ];
+
+  if (!allowedPriceIds.includes(priceId)) {
+    throw new Error("Invalid price ID");
+  }
+
   const session = await stripe.checkout.sessions.create({
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
-    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/billing/success`,
-    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/resumes`,
-    customer_email: user.emailAddresses[0].emailAddress,
+    success_url: `${env.NEXT_PUBLIC_BASE_URL}/billing/success`,
+    cancel_url: `${env.NEXT_PUBLIC_BASE_URL}/resumes`,
+    customer_email:
+      user.primaryEmailAddress?.emailAddress ??
+      user.emailAddresses[0]?.emailAddress,
+    metadata: {
+      userId: user.id,
+    },
     subscription_data: {
       metadata: {
         userId: user.id,
       },
-    },
-    custom_text: {
-      terms_of_service_acceptance: {
-        message: `I have read AI Resume Builder's [terms of services](${process.env.NEXT_PUBLIC_BASE_URL}/tos) and agree to them.`,
-      },
-    },
-    consent_collection: {
-      terms_of_service: "required",
     },
   });
 
