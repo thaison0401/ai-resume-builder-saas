@@ -1,7 +1,7 @@
 "use server";
 
 import genAI from "@/lib/gemini";
-import { HarmCategory, HarmBlockThreshold } from "@google/generative-ai"; // Import thêm cấu hình an toàn
+import { HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import {
   generateSummarySchema,
   GenerateSummaryInput,
@@ -14,7 +14,6 @@ import { getUserSubscriptionLevel } from "@/lib/subscription";
 import { canUseAITools } from "@/lib/permissions";
 
 // --- Cấu hình dùng chung cho Model Gemini ---
-// Hạ mức độ chặn từ khóa để tránh API bị crash ngẫu nhiên với các CV ngành IT/Bảo mật
 const safetySettings = [
   {
     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
@@ -34,7 +33,8 @@ const safetySettings = [
   },
 ];
 
-export async function generateSummary(input: GenerateSummaryInput) {
+// --- HÀM HELPER: Dùng chung để kiểm tra quyền sử dụng AI ---
+async function assertCanUseAITools() {
   const { userId } = await auth();
 
   if (!userId) {
@@ -46,6 +46,11 @@ export async function generateSummary(input: GenerateSummaryInput) {
   if (!canUseAITools(subscriptionLevel)) {
     throw new Error("Upgrade your subscription to use this feature");
   }
+}
+
+export async function generateSummary(input: GenerateSummaryInput) {
+  // Gọi hàm kiểm tra quyền gọn gàng
+  await assertCanUseAITools();
 
   const { jobTitle, workExperiences, educations, skills } =
     generateSummarySchema.parse(input);
@@ -112,17 +117,8 @@ export async function generateSummary(input: GenerateSummaryInput) {
 export async function generateWorkExperience(
   input: GenerateWorkExperienceInput,
 ) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
-  const subscriptionLevel = await getUserSubscriptionLevel(userId);
-
-  if (!canUseAITools(subscriptionLevel)) {
-    throw new Error("Upgrade your subscription to use this feature");
-  }
+  // Gọi hàm kiểm tra quyền gọn gàng
+  await assertCanUseAITools();
 
   const { description } = generateWorkExperienceSchema.parse(input);
 
