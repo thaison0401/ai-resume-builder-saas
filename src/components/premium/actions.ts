@@ -11,6 +11,10 @@ export async function createCheckoutSession(priceId: string) {
     throw new Error("Unauthorized");
   }
 
+  const stripeCustomerId = user.privateMetadata.stripeCustomerId as
+    | string
+    | undefined;
+
   const allowedPriceIds = [
     env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY,
     env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY,
@@ -25,9 +29,11 @@ export async function createCheckoutSession(priceId: string) {
     mode: "subscription",
     success_url: `${env.NEXT_PUBLIC_BASE_URL}/billing/success`,
     cancel_url: `${env.NEXT_PUBLIC_BASE_URL}/resumes`,
-    customer_email:
-      user.primaryEmailAddress?.emailAddress ??
-      user.emailAddresses[0]?.emailAddress,
+    customer: stripeCustomerId,
+    customer_email: stripeCustomerId
+      ? undefined
+      : (user.primaryEmailAddress?.emailAddress ??
+        user.emailAddresses[0]?.emailAddress),
     metadata: {
       userId: user.id,
     },
