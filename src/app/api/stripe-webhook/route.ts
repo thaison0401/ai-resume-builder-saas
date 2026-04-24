@@ -14,11 +14,19 @@ export async function POST(req: NextRequest) {
       return new Response("Signature is missing", { status: 400 });
     }
 
-    const event = stripe.webhooks.constructEvent(
-      payload,
-      signature,
-      env.STRIPE_WEBHOOK_SECRET,
-    );
+    let event: Stripe.Event;
+
+    // FIX 3: Bọc constructEvent vào try/catch riêng biệt để trả về 400 nếu sai chữ ký
+    try {
+      event = stripe.webhooks.constructEvent(
+        payload,
+        signature,
+        env.STRIPE_WEBHOOK_SECRET,
+      );
+    } catch (err) {
+      console.error("Webhook signature verification failed:", err);
+      return new Response("Invalid signature", { status: 400 });
+    }
 
     switch (event.type) {
       case "checkout.session.completed":
@@ -38,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     return new Response("Event received", { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Webhook processing error:", error);
     return new Response("Internal server error", { status: 500 });
   }
 }
@@ -50,7 +58,10 @@ async function handleSessionCompleted(session: Stripe.Checkout.Session) {
     throw new Error("User ID is missing in session metadata");
   }
 
-  (await clerkClient()).users.updateUserMetadata(userId, {
+  // FIX 1: Đã thêm await để đảm bảo Vercel không ngắt sớm
+  await (
+    await clerkClient()
+  ).users.updateUserMetadata(userId, {
     privateMetadata: {
       stripeCustomerId: session.customer as string,
     },
@@ -65,20 +76,17 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     subscription.status === "trialing" ||
     subscription.status === "past_due"
   ) {
-    const currentItem = subscription.items.data[0];
+    // FIX 4: Lập trình phòng thủ, kiểm tra userId trước khi gọi Prisma
+    const userId = subscription.metadata.userId;
+    if (!userId) {
+      console.warn(
+        "Skipping upsert: User ID is missing in subscription metadata",
+      );
+      return; // Kết thúc sớm, không quăng lỗi để Stripe khỏi retry
+    }
 
-    // Cast qua unknown trước để tránh dùng any
-    const itemWithPeriod = currentItem as unknown as {
-      current_period_end?: number;
-    };
-    const subscriptionWithPeriod = subscription as unknown as {
-      current_period_end?: number;
-    };
-
-    const currentPeriodEnd =
-      itemWithPeriod.current_period_end ??
-      subscriptionWithPeriod.current_period_end;
-
+    // FIX 2: Loại bỏ ép kiểu unknown, lấy trực tiếp từ items.data[0] theo chuẩn SDK mới
+    const currentPeriodEnd = subscription.items.data[0]?.current_period_end;
     const cancelAtPeriodEnd = subscription.cancel_at_period_end;
 
     if (!currentPeriodEnd) {
@@ -86,17 +94,17 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     }
 
     await prisma.userSubscription.upsert({
-      where: { userId: subscription.metadata.userId },
+      where: { userId: userId },
       create: {
-        userId: subscription.metadata.userId,
+        userId: userId,
         stripeSubscriptionId: subscription.id,
         stripeCustomerId: subscription.customer as string,
-        stripePriceId: currentItem.price.id,
+        stripePriceId: subscription.items.data[0].price.id,
         stripeCurrentPeriodEnd: new Date(currentPeriodEnd * 1000),
         stripeCancelAtPeriodEnd: cancelAtPeriodEnd,
       },
       update: {
-        stripePriceId: currentItem.price.id,
+        stripePriceId: subscription.items.data[0].price.id,
         stripeCurrentPeriodEnd: new Date(currentPeriodEnd * 1000),
         stripeCancelAtPeriodEnd: cancelAtPeriodEnd,
       },
