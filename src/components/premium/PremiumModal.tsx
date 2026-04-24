@@ -1,7 +1,13 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription, // Import thêm cái này
+} from "../ui/dialog";
 import { Button } from "../ui/button";
 import usePremiumModal from "@/hooks/usePremiumModal";
 import { useState } from "react";
@@ -42,11 +48,15 @@ export default function PremiumModal() {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Resume Builder AI Premium</DialogTitle>
+          {/* Khắc phục cảnh báo vàng: Thêm dòng Description ẩn này */}
+          <DialogDescription className="sr-only">
+            Upgrade to Premium or Premium Plus to unlock advanced AI tools and
+            features.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-6">
           <p>Get a premium subscription to unlock more features.</p>
 
-          {/* CẬP NHẬT: flex-col cho mobile và sm:flex-row cho màn hình máy tính */}
           <div className="flex flex-col gap-6 sm:flex-row">
             <div className="flex w-full flex-col space-y-5 sm:w-1/2">
               <h3 className="text-center text-lg font-bold">Premium</h3>
@@ -70,7 +80,6 @@ export default function PremiumModal() {
               </Button>
             </div>
 
-            {/* CẬP NHẬT: Đường kẻ ngăn cách thông minh */}
             <div className="hidden border-l sm:block" />
             <hr className="block border-t sm:hidden" />
 
