@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <header className="shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 p-3">
         <Link href="/resumes" className="flex items-center gap-2">
           <Image
             src={logo}
@@ -36,25 +36,32 @@ export default function Navbar() {
         </Link>
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <UserButton
-            appearance={{
-              baseTheme: mounted && resolvedTheme === "dark" ? dark : undefined,
-              elements: {
-                avatarBox: {
-                  width: 35,
-                  height: 35,
+
+          {/* DÙNG ĐIỀU KIỆN MOUNTED ĐỂ CHỐNG HYDRATION MISMATCH */}
+          {mounted ? (
+            <UserButton
+              appearance={{
+                baseTheme: resolvedTheme === "dark" ? dark : undefined,
+                elements: {
+                  avatarBox: {
+                    width: 35,
+                    height: 35,
+                  },
                 },
-              },
-            }}
-          >
-            <UserButton.MenuItems>
-              <UserButton.Link
-                label="Billing"
-                labelIcon={<CreditCard className="size-4" />}
-                href="/billing"
-              />
-            </UserButton.MenuItems>
-          </UserButton>
+              }}
+            >
+              <UserButton.MenuItems>
+                <UserButton.Link
+                  label="Billing"
+                  labelIcon={<CreditCard className="size-4" />}
+                  href="/billing"
+                />
+              </UserButton.MenuItems>
+            </UserButton>
+          ) : (
+            // Placeholder thay thế khi chưa tải xong (thay h-[35px] thành h-9 để fix cảnh báo Tailwind luôn)
+            <div className="bg-secondary h-9 w-9 animate-pulse rounded-full" />
+          )}
         </div>
       </div>
     </header>
