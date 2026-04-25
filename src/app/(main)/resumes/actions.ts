@@ -12,7 +12,7 @@ export async function deleteResume(id: string) {
     throw new Error("User not authenticated");
   }
 
-  const resume = await prisma.resume.findUnique({
+  const resume = await prisma.resume.findFirst({
     where: {
       id,
       userId,

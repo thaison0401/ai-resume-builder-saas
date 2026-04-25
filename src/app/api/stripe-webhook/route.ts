@@ -74,16 +74,26 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     subscription.status === "trialing" ||
     subscription.status === "past_due"
   ) {
-    const userId = subscription.metadata.userId;
+    let userId = subscription.metadata.userId;
+
+    // Fallback: tìm userId qua customerId nếu metadata thiếu
     if (!userId) {
-      console.error(
-        "CRITICAL ERROR: Skipping upsert. User ID is missing in subscription metadata",
-        { subscriptionId: subscription.id, customerId: subscription.customer },
-      );
+      const userSub = await prisma.userSubscription.findFirst({
+        where: { stripeCustomerId: subscription.customer as string },
+      });
+      if (userSub) userId = userSub.userId;
+    }
+
+    if (!userId) {
+      console.error("CRITICAL ERROR: Cannot find userId for subscription", {
+        subscriptionId: subscription.id,
+        customerId: subscription.customer,
+      });
       return;
     }
 
     let currentPeriodEnd = subscription.items.data[0]?.current_period_end;
+    let isFallbackUsed = false;
 
     if (!currentPeriodEnd) {
       const existingSubscription = await prisma.userSubscription.findUnique({
@@ -93,6 +103,7 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
         currentPeriodEnd = Math.floor(
           existingSubscription.stripeCurrentPeriodEnd.getTime() / 1000,
         );
+        isFallbackUsed = true;
       }
     }
 
@@ -105,6 +116,15 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
 
     const cancelAtPeriodEnd = subscription.cancel_at_period_end;
 
+    const updateData = {
+      stripeSubscriptionId: subscription.id, // ← Quan trọng: sync gói mới nhất
+      stripePriceId: subscription.items.data[0].price.id,
+      stripeCancelAtPeriodEnd: cancelAtPeriodEnd,
+      ...(!isFallbackUsed && {
+        stripeCurrentPeriodEnd: new Date(currentPeriodEnd * 1000),
+      }),
+    };
+
     await prisma.userSubscription.upsert({
       where: { userId },
       create: {
@@ -115,11 +135,7 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
         stripeCurrentPeriodEnd: new Date(currentPeriodEnd * 1000),
         stripeCancelAtPeriodEnd: cancelAtPeriodEnd,
       },
-      update: {
-        stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(currentPeriodEnd * 1000),
-        stripeCancelAtPeriodEnd: cancelAtPeriodEnd,
-      },
+      update: updateData,
     });
 
     revalidatePath("/billing");
@@ -127,7 +143,6 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     await prisma.userSubscription.deleteMany({
       where: { stripeCustomerId: subscription.customer as string },
     });
-
     revalidatePath("/billing");
   }
 }
