@@ -34,7 +34,7 @@ export async function saveResume(values: ResumeValues) {
   }
 
   const existingResume = id
-    ? await prisma.resume.findUnique({ where: { id, userId } })
+    ? await prisma.resume.findFirst({ where: { id, userId } })
     : null;
 
   if (id && !existingResume) {

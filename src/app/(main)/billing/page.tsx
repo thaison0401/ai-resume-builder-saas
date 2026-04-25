@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import GetSubscriptionButton from "./GetSubscriptionButton";
 import { formatDate } from "date-fns";
 import ManageSubscriptionButton from "./ManageSubscriptionButton";
-import { redirect } from "next/navigation"; // Thêm import này
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -16,28 +16,33 @@ export const metadata: Metadata = {
 export default async function Page() {
   const { userId } = await auth();
 
-  // 1. Sửa lỗi render trang trắng
   if (!userId) {
     redirect("/sign-in");
   }
 
-  // 2. Wrap try/catch xung quanh Prisma và Stripe calls
   let subscription = null;
   let priceInfo = null;
+  let stripeFetchFailed = false;
 
+  // 1. Lấy thông tin gói cước từ DB
   try {
     subscription = await prisma.userSubscription.findUnique({
       where: { userId },
     });
+  } catch (error) {
+    console.error("Error retrieving subscription from DB:", error);
+  }
 
-    if (subscription) {
+  // 2. Nếu có gói cước, lấy thông tin giá từ Stripe
+  if (subscription) {
+    try {
       priceInfo = await stripe.prices.retrieve(subscription.stripePriceId, {
         expand: ["product"],
       });
+    } catch (error) {
+      console.error("Error retrieving price info from Stripe:", error);
+      stripeFetchFailed = true; // Đánh dấu lỗi Stripe
     }
-  } catch (error) {
-    console.error("Error retrieving billing info:", error);
-    // Vẫn để trang tiếp tục render, nhưng coi như không có gói cước
   }
 
   return (
@@ -46,12 +51,14 @@ export default async function Page() {
       <p>
         Your current plan:{" "}
         <span className="font-bold">
-          {/* 3. Xử lý an toàn loại bỏ ép kiểu và kiểm tra product bị xoá */}
-          {priceInfo &&
-          typeof priceInfo.product !== "string" &&
-          !("deleted" in priceInfo.product && priceInfo.product.deleted)
-            ? priceInfo.product.name
-            : "Free"}
+          {/* Cập nhật logic hiển thị an toàn */}
+          {stripeFetchFailed
+            ? "Unknown (Error loading from Stripe)"
+            : priceInfo &&
+                typeof priceInfo.product !== "string" &&
+                !("deleted" in priceInfo.product && priceInfo.product.deleted)
+              ? priceInfo.product.name
+              : "Free"}
         </span>
       </p>
       {subscription ? (
@@ -62,7 +69,6 @@ export default async function Page() {
               {formatDate(subscription.stripeCurrentPeriodEnd, "MMM dd, yyyy")}
             </p>
           )}
-
           <ManageSubscriptionButton />
         </>
       ) : (
