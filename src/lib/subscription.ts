@@ -4,6 +4,17 @@ import { env } from "@/env";
 
 export type SubscriptionLevel = "free" | "pro" | "pro_plus";
 
+// Hàm helper dùng chung để ánh xạ PriceId thành tên gói
+export function getPlanTypeFromPriceId(priceId: string): SubscriptionLevel {
+  if (priceId === env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY) {
+    return "pro_plus";
+  }
+  if (priceId === env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY) {
+    return "pro";
+  }
+  return "free";
+}
+
 export const getUserSubscriptionLevel = cache(
   async (userId: string): Promise<SubscriptionLevel> => {
     const subscription = await prisma.userSubscription.findUnique({
@@ -16,20 +27,13 @@ export const getUserSubscriptionLevel = cache(
       return "free";
     }
 
-    if (
-      subscription.stripePriceId === env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY
-    ) {
-      return "pro";
+    // Sử dụng hàm helper dùng chung
+    const plan = getPlanTypeFromPriceId(subscription.stripePriceId);
+
+    if (plan === "free") {
+      console.error("Unknown Stripe price id in user subscription");
     }
 
-    if (
-      subscription.stripePriceId ===
-      env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY
-    ) {
-      return "pro_plus";
-    }
-
-    console.error("Unknown Stripe price id in user subscription");
-    return "free";
+    return plan;
   },
 );

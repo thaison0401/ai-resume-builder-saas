@@ -23,7 +23,7 @@ export default async function Page({ searchParams }: PageProps) {
   }
 
   const resumeToEdit = resumeId
-    ? await prisma.resume.findUnique({
+    ? await prisma.resume.findFirst({
         where: { id: resumeId },
         include: resumeDataInclude,
       })
