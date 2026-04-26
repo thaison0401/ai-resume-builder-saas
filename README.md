@@ -1,123 +1,242 @@
-<div align="center">
-  <img src="src/assets/logo.png" alt="AI Resume Builder Banner" width="18%" />
-  
-  <h1>✨ AI Resume Builder</h1>
-  
-  <p><strong>A Fullstack SaaS application for creating ATS-optimized resumes with AI.</strong></p>
+# ✨ AI Resume Builder
 
-  <p>
-    <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js" />
-    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white" alt="Prisma" />
-    <img src="https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white" alt="Stripe" />
-    <img src="https://img.shields.io/badge/Gemini_AI-8E75B2?style=for-the-badge&logo=googlebard&logoColor=white" alt="Google Gemini" />
-  </p>
+<div align="center">
+  <img src="./src/assets/logo.png" alt="AI Resume Builder Logo" width="18%" />
+
+### Fullstack SaaS application for building ATS-optimized resumes with AI assistance
+
+<p>
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Prisma-3982CE?style=flat-square&logo=prisma&logoColor=white" />
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Stripe-Billing-635BFF?style=flat-square&logo=stripe" />
+  <img src="https://img.shields.io/badge/Gemini-AI-8E75B2?style=flat-square" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-336791?style=flat-square&logo=postgresql" />
+</p>
+
 </div>
+
+---
+
+## 📌 Table of Contents
+
+* Overview
+* Core Features
+* Screenshots
+* Tech Stack
+* Architecture
+* Engineering Challenges Solved
+* Getting Started
+* Future Improvements
 
 ---
 
 ## 📖 Overview
 
-> **Problem:** Writing a professional resume is time-consuming and difficult without design or writing experience. Most tools are either too rigid, lack modern ATS optimization, or are prohibitively expensive.
+> **Problem**
+> Traditional resume builders are often rigid, poorly optimized for ATS parsing, or expensive.
 
-**What this project solves:** A web application where users input raw career data, receive AI-generated professional summaries and work experience bullets, and export a perfectly formatted PDF — all within a tiered, subscription-gated product.
+**Solution**
+AI Resume Builder allows users to create professional resumes through a guided editor, generate AI-enhanced content, manage subscription plans, and export polished PDFs.
 
-**Why it is technically meaningful:** This project covers the complete production SaaS lifecycle: authentication, cloud file storage, generative AI integration, payment processing with complex webhooks, permission-based feature gating, and auto-persisted state — built entirely on modern **Next.js App Router** patterns.
+**Why this project matters technically**
+This project covers a realistic SaaS product lifecycle:
 
----
+* Authentication and protected routes
+* AI integration with structured output parsing
+* Payment processing with webhook lifecycle handling
+* Permission-based subscription gating
+* Auto-persisted resume editing state
+* Cloud storage and PDF export
 
-## 🚀 Key Features
-
-### 🔐 Authentication & Authorization
-- **Clerk Auth:** Secure sign-in/sign-up flows and user management.
-- **Dynamic Permissions:** Subscription levels are resolved per-request and propagated via React Context. Functions like `canCreateResume` or `canUseAITools` are strictly applied on both client and server to prevent IDOR and unauthorized access.
-
-### 📝 Smart Resume Editor
-- **Multi-step UI:** A six-step guided form editor with breadcrumb navigation.
-- **Auto-save System:** Triggered by debounced form state (1500ms), utilizing deep JSON serialization comparison to detect dirty states and prevent unnecessary DB writes.
-- **Rich Interactions:** Drag-and-drop reordering for work/education entries using **DnD Kit**.
-- **Real-time Preview:** A live split-screen preview panel utilizing CSS `zoom` to strictly maintain A4 dimensions dynamically.
-- **Cloud Storage:** Direct photo uploads to **Vercel Blob** with automatic cleanup for orphaned files.
-
-### 🤖 AI Content Generation (Google Gemini)
-- **ATS-Optimized Summaries:** Generates 2–4 sentence professional summaries based on provided job titles, experiences, and skills.
-- **Smart-fill Experience:** Converts raw, informal user text into structured, action-verb-driven bullet points parsed into exact database fields.
-- **Context-Aware Language:** Prompts automatically detect the user's predominant input language (e.g., Vietnamese) while adhering to strict English system guidelines.
-
-### 💳 Payments & Subscriptions (Stripe)
-- **SaaS Tiers:** Free, Pro (3 CVs + AI tools), and Pro Plus (Unlimited + AI + Customizations).
-- **Checkout & Portal:** Stripe Checkout sessions created via Server Actions, with full Customer Portal support.
-- **Robust Webhooks:** Secure handler at `/api/stripe-webhook` managing checkout completions and subscription lifecycles. Uses idempotent upsert logic and fallback customer ID lookups to handle metadata gaps flawlessly.
-
-### 🖨️ PDF Export
-- High-fidelity PDF generation via `react-to-print` targeting the live DOM node, with `@page` CSS overrides to ensure perfect A4 print bounds.
+Built using modern **Next.js App Router** patterns with fullstack production-oriented architecture.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Core Features
 
-| Category | Technology |
-|---|---|
-| **Framework** | Next.js 15 (App Router, Server Components, Server Actions) |
-| **Language** | TypeScript |
-| **Styling & UI** | Tailwind CSS v4, shadcn/ui, Framer Motion, canvas-confetti |
-| **Database & ORM** | PostgreSQL (Vercel Postgres), Prisma ORM |
-| **Auth & Payments**| Clerk, Stripe |
-| **AI Integration** | Google Gemini (`gemini-3-flash-preview`) |
-| **State & Forms** | Zustand, React Hook Form, Zod (Validation) |
-| **Utilities** | DnD Kit (Drag & Drop), date-fns |
+### User Features
+
+* Multi-step resume builder with live preview
+* AI-generated summaries and work experience bullets
+* Drag-and-drop section reordering
+* ATS-friendly PDF export
+* Profile image upload via cloud storage
+
+### SaaS Features
+
+* Clerk authentication and protected user flows
+* Free / Pro / Pro Plus subscription tiers
+* Stripe checkout and billing portal integration
+* Permission-gated feature access based on subscription plan
+
+<details>
+<summary><b>Technical Implementation Details</b></summary>
+
+### Smart Resume Editor
+
+* Debounced autosave (1500ms) with dirty-state detection using deep JSON comparisons
+* Real-time A4 preview rendering using CSS zoom scaling
+* DnD Kit integration for work and education reordering
+* Automatic orphaned file cleanup for uploaded assets
+
+### AI Content Generation
+
+* ATS-optimized professional summary generation
+* Informal input transformed into structured bullet points
+* Language-aware prompting with constrained English output
+
+### Payments
+
+* Secure Stripe webhook handling at `/api/stripe-webhook`
+* Idempotent subscription upserts
+* Fallback customer lookup logic for metadata edge cases
+
+</details>
+
+---
+
+## 📸 Screenshots
+
+> Replace with real project screenshots after deployment.
+
+| Dashboard                   | AI Generation                  | Resume Preview            |
+| --------------------------- | ------------------------------ | ------------------------- |
+| ![](./assets/dashboard.png) | ![](./assets/ai-generator.png) | ![](./assets/preview.png) |
+
+---
+
+## 🛠 Tech Stack
+
+| Category       | Technology                                                 |
+| -------------- | ---------------------------------------------------------- |
+| Framework      | Next.js 15 (App Router, Server Components, Server Actions) |
+| Language       | TypeScript                                                 |
+| UI             | Tailwind CSS v4, shadcn/ui, Framer Motion                  |
+| State & Forms  | Zustand, React Hook Form, Zod                              |
+| Database       | PostgreSQL, Prisma ORM                                     |
+| Authentication | Clerk                                                      |
+| Payments       | Stripe                                                     |
+| AI             | Google Gemini                                              |
+| Utilities      | DnD Kit, date-fns                                          |
+
+---
+
+## 🏗 Architecture
+
+```text
+Frontend (React / Next.js App Router)
+        |
+Server Actions + API Routes
+        |
+     Prisma ORM
+        |
+    PostgreSQL DB
+
+External Services
+- Clerk Authentication
+- Stripe Billing
+- Gemini AI
+- Vercel Blob Storage
+```
+
+---
+
+## ⚙ Engineering Challenges Solved
+
+### Idempotent Stripe Webhooks
+
+Handled duplicate webhook events safely using upsert-based subscription synchronization.
+
+### Efficient Autosave System
+
+Prevented excessive database writes using debounced dirty-state comparisons.
+
+### Permission-Based Feature Gating
+
+Implemented access controls across both client and server to prevent unauthorized premium feature use.
 
 ---
 
 ## 💻 Getting Started
 
-Follow these steps to run the project locally.
-
 ### Prerequisites
-- Node.js (v18.x or higher)
-- A PostgreSQL database (e.g., Supabase, Vercel Postgres, or local)
-- Accounts for Clerk, Stripe, and Google AI Studio (Gemini)
 
-### Installation
+* Node.js 18+
+* PostgreSQL database
+* Clerk account
+* Stripe account
+* Google AI Studio API key
 
-1. **Clone the repository**
-   ```bash
-   git clone [https://github.com/yourusername/ai-resume-builder.git](https://github.com/yourusername/ai-resume-builder.git)
-   cd ai-resume-builder
-Install dependencies
+### Clone Repository
 
-Bash
+```bash
+git clone https://github.com/yourusername/ai-resume-builder.git
+cd ai-resume-builder
+```
+
+### Install Dependencies
+
+```bash
 npm install
-# or yarn install / pnpm install
-Set up Environment Variables
-Create a .env file in the root directory and populate it with the required keys (see .env.example if available):
+```
 
-Đoạn mã
-# Database
-DATABASE_URL="..."
+### Configure Environment Variables
 
-# Clerk Auth
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="..."
-CLERK_SECRET_KEY="..."
+Create `.env`:
 
-# Stripe
-STRIPE_SECRET_KEY="..."
-STRIPE_WEBHOOK_SECRET="..."
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="..."
-NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY="..."
+```env
+DATABASE_URL=
 
-# Gemini AI
-GEMINI_API_KEY="..."
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
 
-# Vercel Blob
-BLOB_READ_WRITE_TOKEN="..."
-Initialize the Database
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY=
 
-Bash
+GEMINI_API_KEY=
+
+BLOB_READ_WRITE_TOKEN=
+```
+
+### Initialize Database
+
+```bash
 npx prisma db push
 npx prisma generate
-Run the Development Server
+```
 
-Bash
+### Run Development Server
+
+```bash
 npm run dev
-Open http://localhost:3000 with your browser to see the result.
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## 🔭 Future Improvements
+
+* Multi-template resume themes
+* Resume scoring and ATS diagnostics
+* Collaborative resume reviews
+* AI cover letter generation
+* Internationalization support (i18n)
+
+---
+
+## 👨‍💻 Author
+
+Built as a fullstack portfolio project focused on SaaS engineering patterns, AI integration, and modern web architecture.
+
+If you found this project interesting, consider giving it a star.
