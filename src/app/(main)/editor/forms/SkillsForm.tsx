@@ -49,8 +49,8 @@ export default function SkillsForm({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Skills</h2>
-        <p className="text-muted-foreground text-sm">What are you good at?</p>
+        <h2 className="text-2xl font-semibold">Kỹ năng</h2>
+        <p className="text-muted-foreground text-sm">Bạn giỏi những gì?</p>
       </div>
       <Form {...form}>
         <form className="space-y-3">
@@ -59,7 +59,7 @@ export default function SkillsForm({
             name="skills"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="sr-only">Skills</FormLabel>
+                <FormLabel className="sr-only">Kỹ năng</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
@@ -68,7 +68,7 @@ export default function SkillsForm({
                         ? field.value.join(", ")
                         : field.value
                     }
-                    placeholder="e.g React.js, Node.js, graphic design, ..."
+                    placeholder="VD: Làm việc nhóm, Thiết kế đồ họa, ..."
                     onChange={(e) => {
                       field.onChange(e.target.value);
                     }}
@@ -82,7 +82,7 @@ export default function SkillsForm({
                   />
                 </FormControl>
                 <FormDescription>
-                  Separate each skill with a comma.
+                  Phân cách mỗi kỹ năng bằng dấu phẩy.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

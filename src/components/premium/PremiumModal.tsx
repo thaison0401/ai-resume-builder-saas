@@ -15,8 +15,8 @@ import { toast } from "sonner";
 import { createCheckoutSession } from "./actions";
 import { env } from "@/env";
 
-const premiumFeatures = ["AI tools", "Up to 3 resumes"];
-const premiumPlusFeatures = ["Infinite resumes", "Design customizations"];
+const premiumFeatures = ["Công cụ AI", "Tối đa 3 CV"];
+const premiumPlusFeatures = ["CV không giới hạn", "Tùy chỉnh giao diện"];
 
 export default function PremiumModal() {
   const { open, setOpen } = usePremiumModal();
@@ -30,7 +30,7 @@ export default function PremiumModal() {
       window.location.href = redirectUrl;
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
@@ -47,15 +47,15 @@ export default function PremiumModal() {
     >
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Resume Builder AI Premium</DialogTitle>
+          <DialogTitle>AI Tạo CV Premium</DialogTitle>
           {/* Khắc phục cảnh báo vàng: Thêm dòng Description ẩn này */}
           <DialogDescription className="sr-only">
-            Upgrade to Premium or Premium Plus to unlock advanced AI tools and
-            features.
+            Nâng cấp lên Premium hoặc Premium Plus để mở khóa công cụ AI và các
+            tính năng nâng cao.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-6">
-          <p>Get a premium subscription to unlock more features.</p>
+          <p>Đăng ký gói cao cấp để mở khóa thêm nhiều tính năng.</p>
 
           <div className="flex flex-col gap-6 sm:flex-row">
             <div className="flex w-full flex-col space-y-5 sm:w-1/2">
@@ -76,7 +76,7 @@ export default function PremiumModal() {
                 }
                 disabled={loading}
               >
-                Get Premium
+                Đăng ký Premium
               </Button>
             </div>
 
@@ -104,7 +104,7 @@ export default function PremiumModal() {
                 }
                 disabled={loading}
               >
-                Get Premium Plus
+                Đăng kí Premium Plus
               </Button>
             </div>
           </div>

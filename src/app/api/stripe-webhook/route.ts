@@ -75,13 +75,15 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     subscription.status === "past_due"
   ) {
     let userId = subscription.metadata.userId;
+    // Khai báo biến ở ngoài cùng để tái sử dụng, tránh gọi DB 2 lần
+    let existingSubscription = null;
 
-    // Fallback: tìm userId qua customerId nếu metadata thiếu
+    // Fallback: tìm userId qua customerId nếu metadata thiếu (DÙNG findUnique)
     if (!userId) {
-      const userSub = await prisma.userSubscription.findFirst({
+      existingSubscription = await prisma.userSubscription.findUnique({
         where: { stripeCustomerId: subscription.customer as string },
       });
-      if (userSub) userId = userSub.userId;
+      if (existingSubscription) userId = existingSubscription.userId;
     }
 
     if (!userId) {
@@ -96,7 +98,8 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     let isFallbackUsed = false;
 
     if (!currentPeriodEnd) {
-      const existingSubscription = await prisma.userSubscription.findUnique({
+      // Dùng ??= để chỉ gọi DB nếu biến existingSubscription đang rỗng
+      existingSubscription ??= await prisma.userSubscription.findUnique({
         where: { userId },
       });
       if (existingSubscription) {
@@ -117,7 +120,7 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     const cancelAtPeriodEnd = subscription.cancel_at_period_end;
 
     const updateData = {
-      stripeSubscriptionId: subscription.id, // ← Quan trọng: sync gói mới nhất
+      stripeSubscriptionId: subscription.id,
       stripePriceId: subscription.items.data[0].price.id,
       stripeCancelAtPeriodEnd: cancelAtPeriodEnd,
       ...(!isFallbackUsed && {
@@ -143,6 +146,7 @@ async function handleSubscriptionCreatedOrUpdated(subscriptionId: string) {
     await prisma.userSubscription.deleteMany({
       where: { stripeCustomerId: subscription.customer as string },
     });
+
     revalidatePath("/billing");
   }
 }

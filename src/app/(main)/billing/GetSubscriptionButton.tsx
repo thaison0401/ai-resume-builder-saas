@@ -8,7 +8,7 @@ export default function GetSubscriptionButton() {
 
   return (
     <Button onClick={() => premiumModal.setOpen(true)} variant="premium">
-      Get Premium subscription
+      Đăng ký gói cao cấp
     </Button>
   );
 }

@@ -88,7 +88,7 @@ function PersonalInfoHeader({ resumeData }: ResumeSectionProps) {
           src={photoSrc}
           width={100}
           height={100}
-          alt="Author photo"
+          alt="Ảnh của bạn"
           className="aspect-square object-cover"
           style={{
             borderRadius:
@@ -131,7 +131,7 @@ function SummarySection({ resumeData }: ResumeSectionProps) {
       <hr className="border-2" style={{ borderColor: colorHex }} />
       <div className="break-inside-avoid space-y-3">
         <p className="text-lg font-semibold" style={{ color: colorHex }}>
-          Professional profile
+          Tóm tắt bản thân
         </p>
         <div className="text-sm whitespace-pre-line">{summary}</div>
       </div>
@@ -153,7 +153,7 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
       <hr className="border-2" style={{ borderColor: colorHex }} />
       <div className="space-y-3">
         <p className="text-lg font-semibold" style={{ color: colorHex }}>
-          Work experience
+          Kinh nghiệm làm việc
         </p>
         {workExperiencesNotEmpty.map((exp, index) => (
           <div key={index} className="break-inside-avoid space-y-1">
@@ -167,7 +167,7 @@ function WorkExperienceSection({ resumeData }: ResumeSectionProps) {
                   {format(parseISO(exp.startDate), "MM/yyyy")} -{" "}
                   {exp.endDate
                     ? format(parseISO(exp.endDate), "MM/yyyy")
-                    : "Present"}
+                    : "Hiện tại"}
                 </span>
               )}
             </div>
@@ -194,7 +194,7 @@ function EducationSection({ resumeData }: ResumeSectionProps) {
       <hr className="border-2" style={{ borderColor: colorHex }} />
       <div className="space-y-3">
         <p className="text-lg font-semibold" style={{ color: colorHex }}>
-          Education
+          Học vấn
         </p>
         {educationsNotEmpty.map((edu, index) => (
           <div key={index} className="break-inside-avoid space-y-1">
@@ -208,7 +208,7 @@ function EducationSection({ resumeData }: ResumeSectionProps) {
                   {format(parseISO(edu.startDate), "MM/yyyy")} -{" "}
                   {edu.endDate
                     ? format(parseISO(edu.endDate), "MM/yyyy")
-                    : "Present"}
+                    : "Hiện tại"}
                 </span>
               )}
             </div>
@@ -230,7 +230,7 @@ function SkillsSection({ resumeData }: ResumeSectionProps) {
       <hr className="border-2" style={{ borderColor: colorHex }} />
       <div className="break-inside-avoid space-y-3">
         <p className="text-lg font-semibold" style={{ color: colorHex }}>
-          Skills
+          Kỹ năng
         </p>
         <div className="flex break-inside-avoid flex-wrap gap-2">
           {skills.map((skill, index) => (

@@ -30,9 +30,7 @@ export default function Navbar() {
             height={35}
             className="rounded-full"
           />
-          <span className="text-xl font-bold tracking-tight">
-            AI Resume Builder
-          </span>
+          <span className="text-xl font-bold tracking-tight">AI Tạo CV</span>
         </Link>
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -52,7 +50,7 @@ export default function Navbar() {
             >
               <UserButton.MenuItems>
                 <UserButton.Link
-                  label="Billing"
+                  label="Thanh toán"
                   labelIcon={<CreditCard className="size-4" />}
                   href="/billing"
                 />

@@ -45,8 +45,10 @@ export default function PersonalInfoForm({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Personal info</h2>
-        <p className="text-muted-foreground text-sm">Tell us about yourself.</p>
+        <h2 className="text-2xl font-semibold">Thông tin cá nhân</h2>
+        <p className="text-muted-foreground text-sm">
+          Hãy cho chúng tôi biết về bạn.
+        </p>
       </div>
       <Form {...form}>
         <form className="space-y-3">
@@ -56,7 +58,7 @@ export default function PersonalInfoForm({
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             render={({ field: { value, ...fieldValues } }) => (
               <FormItem>
-                <FormLabel>Your photo</FormLabel>
+                <FormLabel>Ảnh đại diện</FormLabel>
                 <div className="flex items-center gap-2">
                   <FormControl>
                     <Input
@@ -80,7 +82,7 @@ export default function PersonalInfoForm({
                       }
                     }}
                   >
-                    Remove
+                    Xóa ảnh
                   </Button>
                 </div>
                 <FormMessage />
@@ -93,7 +95,7 @@ export default function PersonalInfoForm({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First name</FormLabel>
+                  <FormLabel>Họ</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -106,7 +108,7 @@ export default function PersonalInfoForm({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last name</FormLabel>
+                  <FormLabel>Tên</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -120,7 +122,7 @@ export default function PersonalInfoForm({
             name="jobTitle"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Job title</FormLabel>
+                <FormLabel>Chức danh</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -134,7 +136,7 @@ export default function PersonalInfoForm({
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>Thành phố</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -147,7 +149,7 @@ export default function PersonalInfoForm({
               name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>Quốc gia</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -161,7 +163,7 @@ export default function PersonalInfoForm({
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>Số điện thoại</FormLabel>
                 <FormControl>
                   <Input {...field} type="tel" />
                 </FormControl>

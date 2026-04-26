@@ -35,7 +35,7 @@ export default function GenerateSummaryButton({
       onSummaryGenerated(aiResponse);
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
@@ -48,7 +48,7 @@ export default function GenerateSummaryButton({
       loading={loading}
     >
       <WandSparklesIcon className="size-4" />
-      Generate (AI)
+      Tạo bằng AI
     </LoadingButton>
   );
 }

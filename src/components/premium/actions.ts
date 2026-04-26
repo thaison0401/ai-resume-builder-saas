@@ -24,10 +24,16 @@ export async function createCheckoutSession(priceId: string) {
     throw new Error("Invalid price ID");
   }
 
+  // Xác định gói cước người dùng vừa chọn dựa trên priceId
+  const isProPlus =
+    priceId === env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY;
+  const planType = isProPlus ? "pro_plus" : "pro";
+
   const session = await stripe.checkout.sessions.create({
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
-    success_url: `${env.NEXT_PUBLIC_BASE_URL}/billing/success`,
+    // Cập nhật success_url: Gắn thêm query parameter plan tương ứng
+    success_url: `${env.NEXT_PUBLIC_BASE_URL}/billing/success?plan=${planType}`,
     cancel_url: `${env.NEXT_PUBLIC_BASE_URL}/billing`,
     customer: stripeCustomerId,
     customer_email: stripeCustomerId

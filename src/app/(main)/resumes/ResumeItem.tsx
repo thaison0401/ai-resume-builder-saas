@@ -49,14 +49,14 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
           className="inline-block w-full text-center"
         >
           <p className="line-clamp-1 font-semibold">
-            {resume.title || "No title"}
+            {resume.title || "Chưa đặt tên"}
           </p>
           {resume.description && (
             <p className="line-clamp-2 text-sm">{resume.description}</p>
           )}
           <p className="text-muted-foreground text-xs">
-            {wasUpdated ? "Updated" : "Created"} on{" "}
-            {formatDate(resume.updatedAt, "MMM d, yyyy h:mm a")}
+            {wasUpdated ? "Cập nhật" : "Tạo"} lúc{" "}
+            {formatDate(resume.updatedAt, "HH:mm, dd/MM/yyyy")}
           </p>
         </Link>
         <Link
@@ -102,14 +102,14 @@ function MoreMenu({ resumeId, onPrintClick }: MoreMenuProps) {
             onClick={() => setShowDeleteConfirmation(true)}
           >
             <Trash2 className="size-4" />
-            Delete
+            Xóa
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center gap-2"
             onClick={onPrintClick}
           >
             <Printer className="size-4" />
-            Print
+            In CV
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -142,7 +142,7 @@ function DeleteConfirmationDialog({
         onOpenChange(false);
       } catch (error) {
         console.error(error);
-        toast.error("Something went wrong. Please try again.");
+        toast.error("Đã xảy ra lỗi. Vui lòng thử lại.");
       }
     });
   }
@@ -150,10 +150,9 @@ function DeleteConfirmationDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete resume?</DialogTitle>
+          <DialogTitle>Xóa CV?</DialogTitle>
           <DialogDescription>
-            This will permanently delete this resume. This action cannot be
-            undone.
+            CV này sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -162,14 +161,14 @@ function DeleteConfirmationDialog({
             onClick={handleDelete}
             loading={isPending}
           >
-            Delete
+            Xóa
           </LoadingButton>
           <Button
             variant="secondary"
             onClick={() => onOpenChange(false)}
             disabled={isPending}
           >
-            Cancel
+            Hủy
           </Button>
         </DialogFooter>
       </DialogContent>

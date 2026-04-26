@@ -58,7 +58,7 @@ export default function GenerateWorkExperienceButton({
         }}
       >
         <WandSparklesIcon className="size-4" />
-        Smart fill (AI)
+        Điền thông minh (AI)
       </Button>
       <InputDialog
         open={showInputDialog}
@@ -96,7 +96,7 @@ function InputDialog({
       onWorkExperienceGenerated(response);
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại.");
     }
   }
 
@@ -104,10 +104,9 @@ function InputDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Generate work experience</DialogTitle>
+          <DialogTitle>Tạo kinh nghiệm làm việc bằng AI</DialogTitle>
           <DialogDescription>
-            Describe this work experience and the AI will generate an optimized
-            entry for you.
+            Mô tả kinh nghiệm làm việc và AI sẽ tạo nội dung tối ưu cho bạn.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -117,12 +116,12 @@ function InputDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Mô tả</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       placeholder={
-                        'E.g. "from nov 2019 to dec 2020 I worked at google as a software engineer, tasks were: ...'
+                        'Ví dụ: "Từ tháng 11/2019 đến tháng 12/2020, tôi làm kỹ sư phần mềm tại Google, công việc bao gồm: ...'
                       }
                       autoFocus
                     />
@@ -132,7 +131,7 @@ function InputDialog({
               )}
             />
             <LoadingButton type="submit" loading={form.formState.isSubmitting}>
-              Generate
+              Tạo
             </LoadingButton>
           </form>
         </Form>
