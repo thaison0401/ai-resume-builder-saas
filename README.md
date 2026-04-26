@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="src/assets/logo.png" alt="AI Resume Builder Banner" width="15%" />
+  <img src="src/assets/logo.png" alt="AI Resume Builder Banner" width="18%" />
+  
   <h1>✨ AI Resume Builder</h1>
   
   <p><strong>A Fullstack SaaS application for creating ATS-optimized resumes with AI.</strong></p>
@@ -83,3 +84,40 @@ Follow these steps to run the project locally.
    ```bash
    git clone [https://github.com/yourusername/ai-resume-builder.git](https://github.com/yourusername/ai-resume-builder.git)
    cd ai-resume-builder
+Install dependencies
+
+Bash
+npm install
+# or yarn install / pnpm install
+Set up Environment Variables
+Create a .env file in the root directory and populate it with the required keys (see .env.example if available):
+
+Đoạn mã
+# Database
+DATABASE_URL="..."
+
+# Clerk Auth
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="..."
+CLERK_SECRET_KEY="..."
+
+# Stripe
+STRIPE_SECRET_KEY="..."
+STRIPE_WEBHOOK_SECRET="..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="..."
+NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_MONTHLY="..."
+
+# Gemini AI
+GEMINI_API_KEY="..."
+
+# Vercel Blob
+BLOB_READ_WRITE_TOKEN="..."
+Initialize the Database
+
+Bash
+npx prisma db push
+npx prisma generate
+Run the Development Server
+
+Bash
+npm run dev
+Open http://localhost:3000 with your browser to see the result.
