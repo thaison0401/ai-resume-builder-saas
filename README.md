@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="src/asset/logo.png" alt="AI Resume Builder Banner" width="15%" />
+  <img src="./src/asset/logo.png" alt="AI Resume Builder Banner" width="15%" />
   
   <h1>✨ AI Resume Builder</h1>
   
