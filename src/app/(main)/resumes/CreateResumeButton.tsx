@@ -20,7 +20,7 @@ export default function CreateResumeButton({
       <Button asChild className="mx-auto flex w-fit gap-2">
         <Link href="/editor">
           <PlusSquare className="size-5" />
-          New resume
+          Tạo CV mới
         </Link>
       </Button>
     );
@@ -31,7 +31,7 @@ export default function CreateResumeButton({
       onClick={() => setOpen(true)} // Đổi từ PremiumModal.setOpen thành setOpen
       className="mx-auto flex w-fit gap-2"
     >
-      <PlusSquare className="size-5" /> New resume
+      <PlusSquare className="size-5" /> Tạo CV mới
     </Button>
   );
 }

@@ -18,27 +18,27 @@ export default function Home() {
           className="mx-auto md:ms-0"
         />
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Create the{" "}
+          Tạo{" "}
           <span className="inline-block bg-gradient-to-r from-green-600 to-green-400 bg-clip-text text-transparent">
-            Perfect Resume
+            CV hoàn hảo
           </span>{" "}
-          in Minutes
+          trong vòng vài phút
         </h1>
         {/* Dùng text-muted-foreground chuẩn của Shadcn thay vì gray-500 */}
         <p className="text-muted-foreground text-lg">
-          Our{" "}
+          Công cụ{" "}
           <span className="text-foreground font-bold">AI resume builder</span>{" "}
-          helps you design a professional resume, even if you&apos;re not a
-          design expert.
+          giúp bạn thiết kế CV chuyên nghiệp, dù bạn không phải chuyên gia thiết
+          kế.
         </p>
         <Button asChild size="lg" variant="premium">
-          <Link href="/resumes">Get started</Link>
+          <Link href="/resumes">Bắt đầu ngay</Link>
         </Button>
       </div>
       <div>
         <Image
           src={resumePreview}
-          alt="Resume preview"
+          alt="Xem trước CV"
           width={600}
           className="shadow-md lg:rotate-[1.5deg]"
         />

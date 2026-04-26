@@ -11,25 +11,29 @@ export const steps: {
   component: React.ComponentType<EditorFormProps>;
   key: string;
 }[] = [
-  { title: "General info", component: GeneralInfoForm, key: "general-info" },
-  { title: "Personal info", component: PersonalInfoForm, key: "personal-info" },
+  { title: "Thông tin chung", component: GeneralInfoForm, key: "general-info" },
   {
-    title: "Work experience",
+    title: "Thông tin cá nhân",
+    component: PersonalInfoForm,
+    key: "personal-info",
+  },
+  {
+    title: "Kinh nghiệm làm việc",
     component: WorkExperienceForm,
     key: "work-experience",
   },
   {
-    title: "Education",
+    title: "Học vấn",
     component: EducationForm,
     key: "education",
   },
   {
-    title: "Skills",
+    title: "Kỹ năng",
     component: SkillsForm,
     key: "skill",
   },
   {
-    title: "Summary",
+    title: "Tóm tắt bản thân",
     component: SummaryForm,
     key: "summary",
   },

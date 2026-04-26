@@ -87,9 +87,9 @@ export default function WorkExperienceForm({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Work experience</h2>
+        <h2 className="text-2xl font-semibold">Kinh nghiệm làm việc</h2>
         <p className="text-muted-foreground text-sm">
-          Add as many work experiences as you like.
+          Thêm bao nhiêu kinh nghiệm làm việc tùy ý.
         </p>
       </div>
       <Form {...form}>
@@ -128,7 +128,7 @@ export default function WorkExperienceForm({
                 })
               }
             >
-              Add work experience
+              Thêm kinh nghiệm
             </Button>
           </div>
         </form>
@@ -172,7 +172,7 @@ function WorkExperienceItem({
       }}
     >
       <div className="flex justify-between gap-2">
-        <span className="font-semibold">Work experience {index + 1}</span>
+        <span className="font-semibold">Kinh nghiệm {index + 1}</span>
         <GripHorizontal
           className="text-muted-foreground size-5 cursor-grab focus:outline-none"
           {...attributes}
@@ -191,7 +191,7 @@ function WorkExperienceItem({
         name={`workExperiences.${index}.position`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Job title</FormLabel>
+            <FormLabel>Chức danh</FormLabel>
             <FormControl>
               <Input {...field} autoFocus />
             </FormControl>
@@ -204,7 +204,7 @@ function WorkExperienceItem({
         name={`workExperiences.${index}.company`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Company</FormLabel>
+            <FormLabel>Công ty</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -218,7 +218,7 @@ function WorkExperienceItem({
           name={`workExperiences.${index}.startDate`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Start date</FormLabel>
+              <FormLabel>Ngày bắt đầu</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -235,7 +235,7 @@ function WorkExperienceItem({
           name={`workExperiences.${index}.endDate`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>End date</FormLabel>
+              <FormLabel>Ngày kết thúc</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -249,15 +249,15 @@ function WorkExperienceItem({
         />
       </div>
       <FormDescription>
-        Leave <span className="font-semibold">end date</span> empty if you are
-        currently working here.
+        Để trống <span className="font-semibold">ngày kết thúc</span> nếu bạn
+        đang làm việc tại đây.
       </FormDescription>
       <FormField
         control={form.control}
         name={`workExperiences.${index}.description`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Description</FormLabel>
+            <FormLabel>Mô tả công việc</FormLabel>
             <FormControl>
               <Textarea {...field} />
             </FormControl>
@@ -266,7 +266,7 @@ function WorkExperienceItem({
         )}
       />
       <Button variant="destructive" type="button" onClick={() => remove(index)}>
-        Remove
+        Xóa
       </Button>
     </div>
   );

@@ -56,9 +56,9 @@ export default function useAutoSaveResume(resumeData: ResumeValues) {
       } catch (error) {
         setIsError(true);
         console.error(error);
-        toast.error("Could not save changes.", {
+        toast.error("Không thể lưu thay đổi.", {
           action: {
-            label: "Retry",
+            label: "Thử lại",
             onClick: () => save(),
           },
         });

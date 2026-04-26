@@ -40,10 +40,9 @@ export default function SummaryForm({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Professional summary</h2>
+        <h2 className="text-2xl font-semibold">Tóm tắt bản thân</h2>
         <p className="text-muted-foreground text-sm">
-          Write a short introduction for your resume or let the AI generate one
-          from your entered data.
+          Viết đoạn giới thiệu ngắn hoặc để AI tạo từ dữ liệu bạn đã nhập.
         </p>
       </div>
       <Form {...form}>
@@ -53,11 +52,11 @@ export default function SummaryForm({
             name="summary"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="sr-only">Professional summary</FormLabel>
+                <FormLabel className="sr-only">Tóm tắt bản thân</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder="A brief, engaging text about yourself"
+                    placeholder="Đoạn giới thiệu ngắn gọn và ấn tượng về bản thân bạn"
                   />
                 </FormControl>
                 <FormMessage />

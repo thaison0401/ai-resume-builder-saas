@@ -15,7 +15,7 @@ export default function ManageSubscriptionButton() {
       window.location.href = redirectUrl;
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Đã xảy ra lỗi. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
@@ -23,7 +23,7 @@ export default function ManageSubscriptionButton() {
 
   return (
     <LoadingButton onClick={handleClick} loading={loading}>
-      Manage subscription
+      Quản lý gói đăng ký
     </LoadingButton>
   );
 }

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     default: "AI Resume Builder",
   },
   description:
-    "AI Resume Builder is the easiest way to create a professional resume that will help you land your dream job.",
+    "AI Tạo CV là cách dễ dàng nhất để tạo CV chuyên nghiệp, giúp bạn chinh phục công việc mơ ước.",
 };
 
 export default function RootLayout({
