@@ -37,18 +37,20 @@ export default async function Page() {
   ]);
 
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 px-3 py-6">
-      <CreateResumeButton
-        canCreate={canCreateResume(subscriptionLevel, totalCount)}
-      />
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold">CV của bạn</h1>
-        <p>Tổng số: {totalCount}</p>
-      </div>
-      <div className="flex w-full grid-cols-2 flex-col gap-3 sm:grid md:grid-cols-3 lg:grid-cols-4">
-        {resumes.map((resume) => (
-          <ResumeItem key={resume.id} resume={resume} />
-        ))}
+    <main className="dark:bg-background min-h-screen bg-[#f3fcef] px-3 py-6">
+      <div className="mx-auto w-full max-w-7xl space-y-6">
+        <CreateResumeButton
+          canCreate={canCreateResume(subscriptionLevel, totalCount)}
+        />
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold">CV của bạn</h1>
+          <p className="text-muted-foreground">Tổng số: {totalCount}</p>
+        </div>
+        <div className="flex w-full grid-cols-2 flex-col gap-3 sm:grid md:grid-cols-3 lg:grid-cols-4">
+          {resumes.map((resume) => (
+            <ResumeItem key={resume.id} resume={resume} />
+          ))}
+        </div>
       </div>
     </main>
   );

@@ -3,6 +3,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import stripe from "@/lib/stripe";
 import { env } from "@/env";
+import { getPlanTypeFromPriceId } from "@/lib/subscription"; // Import helper
 
 export async function createCheckoutSession(priceId: string) {
   const user = await currentUser();
@@ -24,14 +25,13 @@ export async function createCheckoutSession(priceId: string) {
     throw new Error("Invalid price ID");
   }
 
-  // Xác định gói cước người dùng vừa chọn dựa trên priceId
-  const isProPlus =
-    priceId === env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO_PLUS_MONTHLY;
-  const planType = isProPlus ? "pro_plus" : "pro";
+  // Xác định gói cước người dùng vừa chọn bằng hàm dùng chung (Đã refactor)
+  const planType = getPlanTypeFromPriceId(priceId);
 
   const session = await stripe.checkout.sessions.create({
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
+    locale: "vi", // Ép Stripe hiển thị tiếng Việt
     // Cập nhật success_url: Gắn thêm query parameter plan tương ứng
     success_url: `${env.NEXT_PUBLIC_BASE_URL}/billing/success?plan=${planType}`,
     cancel_url: `${env.NEXT_PUBLIC_BASE_URL}/billing`,

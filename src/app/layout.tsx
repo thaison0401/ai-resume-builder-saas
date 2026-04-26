@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Manrope, Inter } from "next/font/google"; // Thêm Manrope và Inter
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -12,6 +12,17 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+// Khai báo thêm 2 Font cho Landing Page
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -32,9 +43,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html
-        lang="en"
+        lang="vi"
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${manrope.variable} ${inter.variable} h-full antialiased`}
       >
         <body className="flex min-h-full flex-col">
           <ThemeProvider

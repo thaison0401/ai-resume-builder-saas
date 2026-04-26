@@ -15,11 +15,11 @@ export const personalInfoSchema = z.object({
     .refine(
       (file) =>
         !file || (file instanceof File && file.type.startsWith("image/")),
-      "Must be an image file",
+      "Vui lòng chọn file ảnh",
     )
     .refine(
       (file) => !file || file.size <= 1024 * 1024 * 4,
-      "File must be less than 4MB",
+      "File phải nhỏ hơn 4MB",
     ),
   firstName: optionalString,
   lastName: optionalString,
@@ -99,8 +99,8 @@ export const generateWorkExperienceSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(1, "Required")
-    .min(20, "Must be at least 20 characters"),
+    .min(1, "Không được để trống")
+    .min(20, "Phải có ít nhất 20 ký tự"),
 });
 
 export type GenerateWorkExperienceInput = z.infer<

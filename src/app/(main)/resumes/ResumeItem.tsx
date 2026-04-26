@@ -56,7 +56,7 @@ export default function ResumeItem({ resume }: ResumeItemProps) {
           )}
           <p className="text-muted-foreground text-xs">
             {wasUpdated ? "Cập nhật" : "Tạo"} lúc{" "}
-            {formatDate(resume.updatedAt, "HH:mm, dd/MM/yyyy")}
+            {formatDate(resume.updatedAt, "HH:mm dd/MM/yyyy")}
           </p>
         </Link>
         <Link

@@ -20,7 +20,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="shadow-sm">
+    <header className="dark:bg-background bg-[#f3fcef] shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 p-3">
         <Link href="/resumes" className="flex items-center gap-2">
           <Image
@@ -30,7 +30,9 @@ export default function Navbar() {
             height={35}
             className="rounded-full"
           />
-          <span className="text-xl font-bold tracking-tight">AI Tạo CV</span>
+          <span className="text-xl font-bold tracking-tight">
+            AI Resume Builder
+          </span>
         </Link>
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -57,7 +59,6 @@ export default function Navbar() {
               </UserButton.MenuItems>
             </UserButton>
           ) : (
-            // Placeholder thay thế khi chưa tải xong (thay h-[35px] thành h-9 để fix cảnh báo Tailwind luôn)
             <div className="bg-secondary h-9 w-9 animate-pulse rounded-full" />
           )}
         </div>
