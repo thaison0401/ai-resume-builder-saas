@@ -1,9 +1,9 @@
-# ✨ AI Resume Builder
-
 <div align="center">
-  <img src="./src/assets/logo.png" alt="AI Resume Builder Logo" width="18%" />
-
-### Fullstack SaaS application for building ATS-optimized resumes with AI assistance
+  <img src="src/asset/logo.png" alt="AI Resume Builder Banner" width="15%" />
+  
+  <h1>✨ AI Resume Builder</h1>
+  
+  <p><strong>A Fullstack SaaS application for creating ATS-optimized resumes with AI.</strong></p>
 
 <p>
   <img src="https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js" />
@@ -247,5 +247,5 @@ https://github.com/thaison0401
 
 ---
 
-⭐ Support
+##⭐ Support
 If you like this project, consider giving it a star ⭐ on GitHub.
