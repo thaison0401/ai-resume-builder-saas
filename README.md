@@ -12,7 +12,8 @@
     <img src="https://img.shields.io/badge/PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white" />
     <img src="https://img.shields.io/badge/Stripe-635BFF?style=flat-square&logo=stripe&logoColor=white" />
     <img src="https://img.shields.io/badge/Gemini_AI-8E75B2?style=flat-square&logo=google&logoColor=white" />
-    <img src="https://img.shields.io/badge/Clerk-Auth-6C47FF?style=flat-square" />
+    <img src="https://img.shields.io/badge/Clerk-6C47FF?style=flat-square" />
+    <img src="https://img.shields.io/badge/Deployed-Vercel-000000?style=flat-square&logo=vercel" />
   </p>
 </div>
 
@@ -20,57 +21,88 @@
 
 ## Table of Contents
 
+- [Live Demo](#live-demo)
 - [Overview](#overview)
-- [Key Features](#key-features)
+- [Why This Project Stands Out](#why-this-project-stands-out)
+- [Screenshots](#screenshots)
+- [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Architecture & Code Structure](#architecture--code-structure)
-- [Engineering Highlights](#engineering-highlights)
-- [Technical Challenges Solved](#technical-challenges-solved)
-- [Resume Bullets](#resume-bullets)
+- [Architecture](#architecture)
+- [Engineering Challenges Solved](#engineering-challenges-solved)
 - [Setup](#setup)
 - [Future Improvements](#future-improvements)
 
 ---
 
-## Overview
+## Live Demo
 
-**Problem:** Writing a professional resume demands both design skill and strong written English — two things most job seekers lack. Existing tools are either too rigid or paywalled for basic functionality.
-
-**What this project does:** Users input raw career data through a guided multi-step editor, receive AI-generated summaries and work experience bullets optimized for ATS systems, then export a formatted A4 PDF — all within a subscription-gated product with three access tiers.
-
-**Why it is technically meaningful:** This project covers the complete production SaaS loop — authentication, cloud file storage, generative AI integration with structured output parsing, Stripe payment processing with webhook lifecycle handling, permission-based feature gating, and auto-persisted client state — built entirely within Next.js 15 App Router without a separate backend service.
+> 🔗 **[your-deployment-url.vercel.app](https://your-deployment-url.vercel.app)**  
+> _Replace with your live Vercel URL before publishing._
 
 ---
 
-## Key Features
+## Overview
+
+Most resume tools are either too rigid to personalize or too expensive to be worth it for students and early-career candidates. This project is a SaaS web app where users build professional resumes through a guided editor, generate AI-written content from their raw notes, and export a formatted A4 PDF — all within a three-tier subscription product.
+
+The entire stack — auth, database, AI, payments, file storage — runs inside a single Next.js 15 App Router application with no separate backend service.
+
+---
+
+## Why This Project Stands Out
+
+- **Complete SaaS loop in one codebase** — authentication, AI integration, Stripe billing with webhook lifecycle handling, cloud file storage, and PDF export, without a dedicated backend service or REST API layer
+- **Server-side enforcement throughout** — every subscription permission is validated on the server inside Server Actions, not just in the UI; bypassing client-side gating does not grant access
+- **Production-oriented decisions** — idempotent Stripe webhook handling, Vercel Blob lifecycle management on every save, and hydration-safe Clerk rendering reflect real deployment concerns, not just feature completion
+
+---
+
+## Screenshots
+
+> 📸 **Screenshots will be added after deployment.**  
+> To add: save captures of the pages below to `./docs/screenshots/`, then uncomment the table.
+
+<!--
+| Landing Page | Resume Editor |
+|---|---|
+| ![Landing](./docs/screenshots/landing.png) | ![Editor](./docs/screenshots/editor.png) |
+
+| AI Generation | Billing & Subscription |
+|---|---|
+| ![AI](./docs/screenshots/ai-generation.png) | ![Billing](./docs/screenshots/billing.png) |
+-->
+
+**Pages to capture:** Landing · Resume Editor · AI Generation dialog · Billing page · PDF export result
+
+---
+
+## Features
 
 ### Resume Editor
-- Six-step guided editor with breadcrumb navigation and URL-persisted step state
-- Real-time A4 preview rendered alongside the form, scaled via CSS `zoom` calculated from a `ResizeObserver`
-- Drag-and-drop reordering of work experience and education entries (DnD Kit)
-- Profile photo upload to Vercel Blob with automatic deletion on replacement or removal
-- Unsaved-changes warning via `beforeunload` event listener
+- Build a resume through six guided steps; progress is auto-saved as you type
+- See a live A4-proportioned preview update in real time alongside the form
+- Reorder work experience and education entries by drag-and-drop
+- Upload a profile photo; replacing or removing it cleans up the old file automatically
+- Customizable accent color and photo border style (Pro Plus tier)
 
 ### AI Content Generation
-- **Summary generation:** Accepts job title, experience, education, and skills; returns a 2–4 sentence ATS-optimized profile via Google Gemini
-- **Work experience smart-fill:** User provides unformatted text; Gemini returns a structured entry parsed server-side via regex into typed `position`, `company`, `startDate`, `endDate`, and `description` fields
-- Language-aware prompting — output matches the predominant language of user input
-- All AI calls are gated behind server-side subscription permission checks
+- Describe your job experience in plain language — AI reformats it into professional bullet points with strong action verbs
+- Generate an ATS-optimized 2–4 sentence profile summary from your existing resume data
+- Input in Vietnamese or English; output matches your language automatically
+- AI features available on Pro and Pro Plus tiers only
 
-### Authentication & Authorization
-- Clerk-managed sign-in/sign-up with route protection via `clerkMiddleware`
-- Subscription level resolved once at layout level and propagated via React Context — no per-component DB calls
-- Permission functions (`canCreateResume`, `canUseAITools`, `canUseCustomizations`) enforced on both client (to trigger premium modal) and server (to reject the action)
+### Authentication
+- Sign up and sign in managed by Clerk
+- All resume data is scoped to your account; routes are protected at the middleware level
 
-### Payments & Subscriptions
-- Three tiers: **Free** (1 CV), **Pro** (3 CVs + AI tools, 99k VND/month), **Pro Plus** (unlimited CVs + AI + customizations, 199k VND/month)
-- Stripe Checkout sessions created via Server Actions with locale set to `vi`
-- Webhook handler at `/api/stripe-webhook` processes `checkout.session.completed`, `subscription.created/updated/deleted`
-- Self-serve billing management via Stripe Customer Portal
+### Subscription & Billing
+- **Free:** 1 CV, basic editor, PDF export
+- **Pro:** Up to 3 CVs, AI tools unlocked
+- **Pro Plus:** Unlimited CVs, all AI tools, color and border customization
+- Upgrade via Stripe Checkout; manage or cancel through the Stripe Customer Portal
 
 ### PDF Export
-- Print-to-PDF via `react-to-print` targeting the live preview DOM node
-- A4 page dimensions enforced via `@page` CSS rule; `zoom` overridden to `1` at print time
+- Export any resume to a formatted A4 PDF directly from the live preview
 
 ---
 
@@ -80,116 +112,105 @@
 |---|---|
 | **Framework** | Next.js 15 — App Router, Server Components, Server Actions |
 | **Language** | TypeScript |
-| **Styling** | Tailwind CSS v4, shadcn/ui component primitives |
+| **Styling** | Tailwind CSS v4, shadcn/ui |
 | **Database** | PostgreSQL via Prisma ORM (Vercel Postgres) |
 | **Authentication** | Clerk |
 | **Payments** | Stripe (Checkout, Webhooks, Customer Portal) |
 | **AI** | Google Gemini (`gemini-3-flash-preview`) |
 | **File Storage** | Vercel Blob |
-| **State Management** | Zustand (global modal state), React Hook Form (form state) |
+| **State Management** | Zustand (global modal), React Hook Form (forms) |
 | **Validation** | Zod — shared schemas across client and server |
-| **Drag & Drop** | DnD Kit (`@dnd-kit/core`, `@dnd-kit/sortable`) |
-| **Animations** | Framer Motion, canvas-confetti |
+| **Drag & Drop** | DnD Kit |
 | **Deployment** | Vercel |
 
 ---
 
-## Architecture & Code Structure
+## Architecture
 
 ```
 src/
 ├── app/
-│   ├── (auth)/                   # Clerk sign-in / sign-up route group
-│   ├── (main)/                   # Authenticated app shell with shared Navbar
-│   │   ├── editor/               # Resume editor — forms, preview, auto-save
-│   │   │   ├── forms/            # Per-step form components + AI action buttons
-│   │   │   ├── actions.ts        # Server Action: saveResume (upsert + blob lifecycle)
-│   │   │   └── useAutoSaveResume.tsx   # Debounced auto-save hook with dirty detection
-│   │   ├── resumes/              # Resume list, creation button, delete action
-│   │   ├── billing/              # Subscription page, Stripe portal, success page
-│   │   └── SubscriptionLevelProvider.tsx  # React Context: propagates resolved tier
-│   ├── api/stripe-webhook/       # Stripe event POST handler
-│   ├── page.tsx                  # Public landing page
-│   └── layout.tsx                # Root layout — fonts, theme provider, Toaster
+│   ├── (auth)/                        # Clerk sign-in / sign-up route group
+│   ├── (main)/                        # Authenticated shell — shared Navbar, layout
+│   │   ├── editor/
+│   │   │   ├── forms/                 # One form component per editor step
+│   │   │   ├── actions.ts             # Server Action: saveResume
+│   │   │   └── useAutoSaveResume.tsx  # Debounced save hook with dirty detection
+│   │   ├── resumes/                   # Resume list, create, delete
+│   │   ├── billing/                   # Subscription page, portal redirect, success
+│   │   └── SubscriptionLevelProvider.tsx
+│   ├── api/stripe-webhook/            # Stripe event handler (POST)
+│   ├── page.tsx                       # Public landing page
+│   └── layout.tsx                     # Root layout — fonts, ThemeProvider, Toaster
 ├── components/
-│   ├── premium/                  # PremiumModal (Zustand-driven) + checkout action
-│   ├── ui/                       # shadcn/ui primitives
-│   └── ResumePreview.tsx         # Stateless A4 preview renderer
-├── hooks/                        # useDebounce, useDimensions, usePremiumModal, useUnloadWarning
-├── lib/
-│   ├── permissions.ts            # Pure functions: feature access rules by subscription level
-│   ├── subscription.ts           # Cached DB lookup + priceId → tier mapping
-│   ├── validation.ts             # Zod schemas — single source of truth for all data shapes
-│   └── utils.ts                  # fileReplacer, mapToResumeValues, cn()
-└── middleware.ts                 # Clerk route protection with public route matcher
+│   ├── premium/                       # PremiumModal + createCheckoutSession action
+│   ├── ui/                            # shadcn/ui primitives
+│   └── ResumePreview.tsx              # Stateless A4 renderer
+├── hooks/                             # useDebounce · useDimensions · usePremiumModal · useUnloadWarning
+└── lib/
+    ├── permissions.ts                 # Pure functions: canCreateResume, canUseAITools, canUseCustomizations
+    ├── subscription.ts                # Cached DB lookup + priceId → tier mapping
+    ├── validation.ts                  # Zod schemas — single source of truth
+    └── utils.ts                       # fileReplacer · mapToResumeValues · cn()
 ```
 
-**Key architectural patterns:**
-- **Server Actions** replace REST endpoints for all mutations — no separate API layer
-- **Route Groups** `(auth)` / `(main)` isolate layout trees without affecting URL structure
-- **Shared Zod schemas** consumed by React Hook Form resolvers (client) and Server Action parsers (server) — one schema, zero duplication
-- **Pure permission functions** in `lib/permissions.ts` keep authorization logic outside components and decoupled from UI framework
-- **React Context at layout level** resolves and distributes subscription tier once per request, not per component
+**Architectural decisions worth noting:**
+
+**No separate backend.** All mutations use Next.js Server Actions. The only `api/` route is the Stripe webhook, which requires a raw POST handler. Everything else — saving resumes, triggering AI, creating checkout sessions — runs inside Server Actions that execute on the server with full access to environment secrets and Prisma.
+
+**Single Zod schema layer.** `lib/validation.ts` defines all data shapes once. React Hook Form resolvers consume them on the client; Server Actions parse and validate incoming data with the same schemas on the server. No duplication, no drift between client and server expectations.
+
+**Subscription tier resolved at layout level.** `SubscriptionLevelProvider` reads the user's tier once in the authenticated layout via a cached Prisma query, then distributes it via React Context. No component below it touches the database to answer "what plan is this user on?".
+
+**Pure permission functions.** `lib/permissions.ts` has no framework imports. Each function takes a subscription level and returns a boolean. They are called in Server Actions (to reject requests) and in components (to show or hide the premium modal). The same function, both places.
 
 ---
 
-## Engineering Highlights
+## Engineering Challenges Solved
 
-### Stripe Webhook Reliability
-The handler at `/api/stripe-webhook` verifies the Stripe signature before processing any event. For `subscription.created/updated`, if `userId` is absent from subscription metadata — possible when subscriptions are created outside the normal checkout flow — the handler falls back to a secondary DB lookup by `stripeCustomerId`. A `??=` lazy assignment avoids redundant queries. All subscription state is written via Prisma `upsert`, making the handler fully idempotent.
+### 1. Stripe Webhook Idempotency and Missing Metadata
 
-### Debounced Auto-Save with File-Aware Dirty Detection
-`useAutoSaveResume` debounces resume state at 1500ms, then compares the current snapshot against the last-saved snapshot using `JSON.stringify` with a custom `fileReplacer`. This replacer serializes `File` objects (non-serializable by default) as plain objects `{ name, size, type, lastModified }` for stable comparison. When no photo change is detected, `photo: undefined` is passed in the save payload — preventing unnecessary Vercel Blob re-uploads. Saves are skipped entirely if data is unchanged, a save is already in-flight, or the previous attempt errored.
+Stripe can deliver `subscription.updated` events where `userId` is absent from subscription metadata — this happens when subscriptions are created or modified outside the checkout flow. Without a fallback, these events silently fail and leave users on Free despite a completed payment.
 
-### Subscription-Gated Feature System
-`lib/permissions.ts` exports three pure functions — `canCreateResume`, `canUseAITools`, `canUseCustomizations` — checked independently on the client (to open the premium modal) and re-checked on the server inside Server Actions (to reject unauthorized calls). This dual-enforcement pattern ensures UI state and server enforcement cannot desync, regardless of client-side manipulation.
+The handler first checks `subscription.metadata.userId`. If absent, it performs a secondary Prisma lookup by `stripeCustomerId` using `??=` to avoid querying twice. All subscription writes use Prisma `upsert`, so replayed webhook events produce the same result as the first delivery.
 
-### AI Structured Output Parsing
-Google Gemini does not return JSON in this implementation. The work experience prompt instructs the model to respond in a strict labeled plain-text format (`Job title:`, `Company:`, `Start date:`, etc.) with explicit instructions against markdown formatting or placeholder text. The server parses the response using named regex captures into a typed `WorkExperience` object. Both prompts include language detection instructions so output matches the user's input language.
+### 2. Auto-Save with File-Object Dirty Detection
 
-### Vercel Blob File Lifecycle
-Every `saveResume` call explicitly manages blob state: if the user changed their photo, the old blob URL is deleted before uploading the new file; if `photo` is `null`, the blob is deleted and the DB field nulled. This prevents orphaned blobs from accumulating in storage across resume updates.
+Debouncing form state at 1500ms is straightforward. The hard part is determining whether the data actually changed when the state includes `File` instances — `File` objects are not JSON-serializable and fail reference comparison across re-renders.
 
-### Hydration-Safe Theme-Aware Clerk UI
-`Navbar.tsx` gates the render of Clerk's `UserButton` behind a `mounted` state flag. Without this, Next.js SSR renders the component before `resolvedTheme` is available, causing a hydration mismatch. The skeleton fallback (`animate-pulse` div) maintains layout stability during the mount cycle.
+A custom `fileReplacer` passed to `JSON.stringify` reduces `File` objects to a stable plain-object representation `{ name, size, type, lastModified }`. The same replacer runs on both the current state and the last-saved snapshot. When no photo change is detected, `photo: undefined` is sent in the payload, skipping the Vercel Blob upload entirely. Saves are also skipped when a prior save is in-flight or the previous attempt errored.
 
----
+### 3. Structured Output from a Generative Model
 
-## Technical Challenges Solved
+Gemini returns plain text, not typed JSON. The work experience prompt defines a strict labeled format (`Job title:`, `Company:`, `Start date:`, `End date:`, `Description:`) and explicitly instructs the model against markdown formatting, placeholder values, and invented data. The server parses the response with named regex captures into a typed `WorkExperience` object. Both prompts include language detection instructions — output language matches the predominant language of user input.
 
-**1. Structured output from a generative model without JSON mode**
-Gemini's response must be parsed into typed fields server-side. The solution required designing a prompt format strict enough to prevent the model from adding markdown, inventing data, or using placeholder strings — then validating the parsed output before returning it to the client.
+### 4. Permission Enforcement That Cannot Be Bypassed Client-Side
 
-**2. Webhook idempotency under missing metadata**
-Stripe can deliver webhook events where `subscription.metadata.userId` is absent. Without the fallback lookup by `stripeCustomerId`, these events would silently fail and leave users on the Free tier despite a successful payment. The fix adds a secondary DB query only when needed, keeping the happy path fast.
+Every premium feature has two enforcement points. On the client, permission functions determine whether to open the premium modal or proceed. On the server, the same permission function runs inside the Server Action before any work happens. A user who bypasses the client-side check — through DevTools or a direct fetch — hits the same rejection on the server. The UI and the server each enforce independently.
 
-**3. `File` object serialization in change detection**
-`File` instances from `<input type="file">` fail with `JSON.stringify` and cannot be compared by reference across re-renders. A custom `fileReplacer` reduces them to a stable plain-object representation. This same replacer is used in the save-skip logic, ensuring photo changes trigger saves while identical photos do not.
+### 5. Vercel Blob File Lifecycle on Every Save
 
-**4. CSS zoom-based A4 scaling without media queries**
-The preview must render at true A4 proportions regardless of container width. A `ResizeObserver` tracks the container's pixel width via a custom `useDimensions` hook, and the inner content is scaled with `zoom: (1 / 794) * containerWidth` — keeping the resume visually accurate at any viewport size without layout recalculation.
+Without explicit cleanup, every resume save that changes the photo would leave the previous blob URL orphaned in storage with no way to find or delete it later.
 
----
+`saveResume` handles three cases explicitly: if `photo` is a `File` instance, the old blob URL is deleted before uploading the new one; if `photo` is `null`, the blob is deleted and the database field is set to null; if `photo` is `undefined` (not changed), neither action runs. This keeps storage in sync with database state on every mutation.
 
-## Resume Bullets
+### 6. Hydration-Safe Theme-Dependent Clerk Rendering
 
-- **Built** a fullstack SaaS resume builder with Next.js 15 App Router, integrating Google Gemini for AI-generated ATS-optimized content and Stripe for three-tier subscription management with webhook-driven state synchronization
-- **Implemented** a Stripe webhook handler with signature verification, idempotent upsert logic, and fallback customer ID lookup, ensuring reliable subscription lifecycle management across metadata edge cases
-- **Designed** a shared Zod validation layer consumed by both React Hook Form (client) and Server Actions (server), enforcing type-safe data flow without schema duplication across a six-step multi-form editor
-- **Engineered** a debounced auto-save system with `File`-aware dirty-state detection using a custom JSON replacer, preventing redundant database writes and blob re-uploads during real-time editing
-- **Architected** a subscription-gated permission system using pure functions enforced on both client and server, with React Context propagation of the resolved tier at layout level to eliminate per-component database queries
-- **Integrated** Vercel Blob for resume photo storage with explicit lifecycle management — uploading, replacing, and nulling blobs atomically alongside Prisma database updates to prevent orphaned storage objects
+Clerk's `UserButton` accepts a `baseTheme` prop that reads `resolvedTheme` from `next-themes`. On the server, `resolvedTheme` is unavailable, so SSR and client render different output — causing a React hydration error in production.
+
+The fix gates the `UserButton` render behind a `mounted` boolean flag set in `useEffect`. A skeleton placeholder with identical dimensions renders on first paint, then swaps out after mount. Layout does not shift; hydration does not fail.
 
 ---
 
 ## Setup
 
 ### Prerequisites
+
 - Node.js 18+
 - PostgreSQL database (or Vercel Postgres)
-- Clerk, Stripe, Google AI Studio, and Vercel Blob accounts
+- Accounts: [Clerk](https://clerk.dev) · [Stripe](https://stripe.com) · [Google AI Studio](https://aistudio.google.com) · [Vercel Blob](https://vercel.com/storage/blob)
 
-### Installation
+### Install
 
 ```bash
 git clone https://github.com/thaison0401/ai-resume-builder.git
@@ -199,7 +220,7 @@ npm install
 
 ### Environment Variables
 
-Create `.env.local`:
+Create `.env.local` at the project root:
 
 ```env
 # Database
@@ -227,15 +248,15 @@ BLOB_READ_WRITE_TOKEN=
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
 
-### Database & Dev Server
+### Run
 
 ```bash
 npx prisma db push
 npm run dev
 ```
 
-For Stripe webhook testing:
 ```bash
+# Separate terminal — Stripe local testing
 stripe listen --forward-to localhost:3000/api/stripe-webhook
 ```
 
@@ -243,17 +264,32 @@ stripe listen --forward-to localhost:3000/api/stripe-webhook
 
 ## Future Improvements
 
-- **Multiple resume templates** — the preview renderer is stateless and data-driven; adding a `template` prop with alternate layout components is architecturally straightforward
-- **Rate limiting on AI endpoints** — Server Actions currently rely on subscription checks but have no per-user request cap; a Redis-backed rate limiter (Upstash) would prevent prompt abuse
-- **Resume analytics** — track view and download counts per resume using an event table in the existing Prisma schema with minimal schema migration
-- **E2E test coverage** — the permission functions and webhook handler are unit-testable in isolation; Playwright could cover the full editor → save → billing flow
+- **Multiple resume templates** — the preview renderer is stateless; adding a `template` prop requires no schema or architecture change
+- **AI rate limiting** — Server Actions currently rely on subscription checks only; an Upstash Redis rate limiter would prevent prompt abuse at scale
+- **Resume analytics** — view and download counts via an event table in the existing Prisma schema, minimal migration required
+- **E2E tests** — permission functions and the webhook handler are unit-testable in isolation; Playwright could cover the editor → save → billing flow end-to-end
+
+---
+
+<details>
+<summary><strong>📄 Resume-Oriented Impact Bullets</strong> &nbsp;—&nbsp; for CV/portfolio reference</summary>
+
+<br />
+
+- **Built** a fullstack SaaS resume builder with Next.js 15 App Router, integrating Google Gemini for AI-generated ATS-optimized content and Stripe for three-tier subscription management with webhook-driven state synchronization
+- **Implemented** a Stripe webhook handler with signature verification, idempotent upsert logic, and fallback customer ID lookup — ensuring reliable subscription lifecycle management across metadata edge cases
+- **Designed** a shared Zod validation layer consumed by both React Hook Form (client) and Server Actions (server), enforcing type-safe data flow without schema duplication across a six-step multi-form editor
+- **Engineered** a debounced auto-save system with `File`-aware dirty-state detection using a custom JSON replacer, preventing redundant database writes and blob re-uploads during real-time editing
+- **Architected** a subscription-gated permission system with dual client-server enforcement, eliminating per-component database queries via React Context propagation of the resolved subscription tier
+- **Integrated** Vercel Blob for resume photo storage with explicit lifecycle management — uploading, replacing, and nulling blobs atomically alongside Prisma updates to prevent orphaned storage objects
+
+</details>
 
 ---
 
 <div align="center">
-  <p>Built by <strong>Tran Thai Son</strong> — Information Technology Student</p>
-  <p>
-    <a href="https://github.com/thaison0401">GitHub</a>
-  </p>
-  <p>If you found this project useful, consider giving it a ⭐</p>
+  <p>Built by <strong>Tran Thai Son</strong> &nbsp;·&nbsp; Information Technology Student</p>
+  <a href="https://github.com/thaison0401">github.com/thaison0401</a>
+  <br /><br />
+  <p>If this project was useful, consider leaving a ⭐</p>
 </div>
