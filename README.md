@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/1200x400/006e2f/ffffff?text=AI+Resume+Builder+Cover+Image" alt="AI Resume Builder Banner" width="100%" />
+  <img src="src/assets/logo.png" alt="AI Resume Builder Banner" width="100%" />
   
   <h1>✨ AI Resume Builder</h1>
   
