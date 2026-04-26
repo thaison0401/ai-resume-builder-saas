@@ -236,7 +236,16 @@ http://localhost:3000
 ---
 
 ## 👨‍💻 Author
+Tran Thai Son
 
-Built as a fullstack portfolio project focused on SaaS engineering patterns, AI integration, and modern web architecture.
+Information Technology Student
 
-If you found this project interesting, consider giving it a star.
+Interested in Full-Stack Development, System Architecture, and Scalable Web Applications
+
+🔗 GitHub
+https://github.com/thaison0401
+
+---
+
+⭐ Support
+If you like this project, consider giving it a star ⭐ on GitHub.
