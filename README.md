@@ -36,7 +36,7 @@
 
 ## Live Demo
 
-> 🔗 **[https://ai-resume-builder-saas-av16.vercel.app/](https://your-deployment-url.vercel.app)**  
+> 🔗 **[https://ai-resume-builder-saas-av16.vercel.app](https://ai-resume-builder-saas-av16.vercel.app)**  
 > _Replace with your live Vercel URL before publishing._
 
 ---
