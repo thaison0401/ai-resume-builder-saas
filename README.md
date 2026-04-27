@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="./src/assets/logo.png" alt="AI Resume Builder" width="100px" />
+  <img src="./src/assets/logo.png" alt="AI Resume Builder" width="18%" />
 
-  <h1>AI Resume Builder</h1>
-
-  <p><strong>A fullstack SaaS application for building ATS-optimized resumes with AI-assisted content generation, tiered subscription access, and real-time PDF preview.</strong></p>
+  <h1>✨ AI Resume Builder</h1> 
+  
+  <p><strong>A Fullstack SaaS application for creating ATS-optimized resumes with AI.</strong></p>
 
   <p>
     <img src="https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js" />
@@ -37,7 +37,6 @@
 ## Live Demo
 
 > 🔗 **[https://ai-resume-builder-saas-av16.vercel.app](https://ai-resume-builder-saas-av16.vercel.app)**  
-> _Replace with your live Vercel URL before publishing._
 
 ---
 
