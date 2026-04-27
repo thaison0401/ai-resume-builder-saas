@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   const resumeToEdit = resumeId
     ? await prisma.resume.findFirst({
-        where: { id: resumeId },
+        where: { id: resumeId, userId }, // Thêm userId vào đây để chặn người lạ
         include: resumeDataInclude,
       })
     : null;

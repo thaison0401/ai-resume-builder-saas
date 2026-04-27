@@ -30,7 +30,7 @@ export default function Home() {
               src={logo}
             />
             <span className="text-2xl font-black tracking-tight text-[#161d16]">
-              AI Remuse Builder
+              AI Resume Builder
             </span>
           </Link>
           <div className="flex items-center gap-4">
