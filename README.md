@@ -61,7 +61,7 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 <!--
 | Landing Page | Resume Editor |
 |---|---|
-| ![Landing](src/assets/landing.png) | ![Editor](src/assets/editor.png) |
+| ![Landing](./src/assets/landing.png) | ![Editor](src/assets/editor.png) |
 
 | AI Generation | Billing & Subscription |
 |---|---|
