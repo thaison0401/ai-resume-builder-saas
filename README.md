@@ -68,7 +68,7 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 
 | Stripe Checkout | PDF Export |
 |---|---|
-| <img src="src/assets/stripe-checkout.png" width="100%"/> | <img src="src/assets/pdf-preview.png" width="100%"/> |
+| <img src="src/assets/stripe-checkout.png" width="80%"/> | <img src="src/assets/pdf-preview.png" width="100%"/> |
 
 ---
 
