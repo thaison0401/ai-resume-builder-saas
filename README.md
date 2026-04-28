@@ -58,9 +58,6 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 
 ## Screenshots
 
-> 📸 **Screenshots will be added after deployment.**  
-> To add: save captures of the pages below to `./docs/screenshots/`, then uncomment the table.
-
 <!--
 | Landing Page | Resume Editor |
 |---|---|
