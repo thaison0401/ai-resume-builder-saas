@@ -58,13 +58,23 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 
 ## Screenshots
 
-| Landing Page | Resume Editor |
-|---|---|
-| <img src="src/assets/landing.png" width="100%"/> | <img src="src/assets/editor.png" width="100%"/> |
+### 🌐 Landing Page
+![Landing](src/assets/landing.png)
 
-| AI Generation | Billing & Subscription |
-|---|---|
-| <img src="src/assets/ai-generation.png" width="100%"/> | <img src="src/assets/billing.png" width="100%"/> |
+### 📝 Resume Editor
+![Editor](src/assets/editor.png)
+
+### 🤖 AI Generation
+![AI](src/assets/ai-generation.png)
+
+### 💳 Billing & Subscription
+![Billing](src/assets/billing.png)
+
+### 💳 Stripe Checkout
+![Stripe](src/assets/stripe-checkout.png)
+
+### 📄 PDF Export (A4)
+![PDF](src/assets/pdf-preview.png)
 
 ---
 
