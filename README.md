@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/src/assets/logo.png" alt="AI Resume Builder" width="18%" />
+  <img src="src/assets/logo.png" alt="AI Resume Builder" width="18%" />
 
   <h1>✨ AI Resume Builder</h1> 
   
@@ -58,10 +58,9 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 
 ## Screenshots
 
-<!--
 | Landing Page | Resume Editor |
 |---|---|
-| ![Landing](<src/assets/landing.png) | ![Editor](src/assets/editor.png) |
+| ![Landing](src/assets/landing.png) | ![Editor](src/assets/editor.png) |
 
 | AI Generation | Billing & Subscription |
 |---|---|
@@ -70,7 +69,6 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 **PDF Export Result** (Pixel-perfect A4 formatting)
 <br/>
 ![PDF Export Result](src/assets/pdf-preview.png)
--->
 
 **Pages to capture:** Landing · Resume Editor · AI Generation dialog · Billing page · PDF export result
 
