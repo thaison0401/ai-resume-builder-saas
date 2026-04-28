@@ -66,9 +66,9 @@ The entire stack — auth, database, AI, payments, file storage — runs inside 
 |---|---|
 | ![AI](src/assets/ai-generation.png) | ![Billing](src/assets/billing.png) |
 
-**PDF Export Result** (Pixel-perfect A4 formatting)
-<br/>
-![PDF Export Result](src/assets/pdf-preview.png)
+| Stripe Checkout | PDF Export |
+|---|---|
+| ![Stripe](src/assets/stripe-checkout.png) | ![PDF](src/assets/pdf-preview.png) |
 
 **Pages to capture:** Landing · Resume Editor · AI Generation dialog · Billing page · PDF export result
 
